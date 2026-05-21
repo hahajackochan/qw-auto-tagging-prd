@@ -27,7 +27,7 @@ const rows=[['57','GR202605180001','oyEgSw-BzOATxNbwaftM6qx8GQqo','无需打标'
 const cls={'待打标':'wait','无需打标':'none','打标成功':'success','打标失败':'fail'};
 document.getElementById('tbody').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="focus-cell focus-start"><span class="status ${cls[r[3]]}">${r[3]}</span></td><td class="focus-cell focus-end">${r[4]==='-'?'<span class="muted">-</span>':`<span class="fail-reason">${r[4]}</span>`}</td></tr>`).join('');
 function toggleDrawer(){document.getElementById('drawer').classList.toggle('show')}
-const focus=new URLSearchParams(location.search).get('focus');if(focus==='tag_status'){document.body.classList.add('focus-user-status');requestAnimationFrame(()=>document.querySelector('.table-card')?.scrollIntoView({block:'center'}));}
+const params=new URLSearchParams(location.search);const focus=params.get('focus');const autoScrollFocus=params.get('autoscroll')==='1';if(focus==='tag_status'){document.body.classList.add('focus-user-status');if(autoScrollFocus)requestAnimationFrame(()=>document.querySelector('.table-card')?.scrollIntoView({block:'center'}));}
 </script>
 </body>
 </html>

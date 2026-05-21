@@ -247,6 +247,7 @@
 
   const params = new URLSearchParams(location.search);
   const focus = params.get('focus');
+  const autoScrollFocus = params.get('autoscroll') === '1';
   function highlightColumns(names) {
     const tableCard = document.querySelector('.table-card');
     const table = tableCard?.querySelector('table');
@@ -300,11 +301,11 @@
 
   if (focus === 'stat_frequency' || focus === 'list_frequency') {
     document.body.classList.add('list-focus');
-    requestAnimationFrame(() => { highlightStatFrequencyColumn(); document.querySelector('.table-card')?.scrollIntoView({block:'start'}); });
+    requestAnimationFrame(() => { highlightStatFrequencyColumn(); if (autoScrollFocus) document.querySelector('.table-card')?.scrollIntoView({block:'start'}); });
   }
   if (focus === 'list_filters') {
     focusListFilters();
-    requestAnimationFrame(() => document.querySelector('.table-card')?.scrollIntoView({block:'start'}));
+    if (autoScrollFocus) requestAnimationFrame(() => document.querySelector('.table-card')?.scrollIntoView({block:'start'}));
   }
 </script>
 </body>

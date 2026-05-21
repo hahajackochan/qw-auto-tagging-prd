@@ -858,6 +858,7 @@
 
   const params = new URLSearchParams(location.search);
   const focus = params.get('focus');
+  const autoScrollFocus = params.get('autoscroll') === '1';
   if (focus) {
     document.body.classList.add('sandbox-focus');
     if (focus === 'stat_frequency') {
@@ -907,7 +908,7 @@
       const qwRow = [...document.querySelectorAll('#behaviorRows .condition-row')].find(r => r.textContent.includes('添加企微客服'));
       if (qwRow) qwRow.querySelectorAll('.value-radio,[data-role="behavior-scene"],[data-role="behavior-field"],[data-role="behavior-operator"]').forEach(el => el.classList.add('focus-inline'));
     }
-    requestAnimationFrame(() => document.querySelector('.focus-hit,.focus-inline')?.scrollIntoView({block:'center'}));
+    if (autoScrollFocus) requestAnimationFrame(() => document.querySelector('.focus-hit,.focus-inline')?.scrollIntoView({block:'center'}));
   }
 </script>
 </body>
