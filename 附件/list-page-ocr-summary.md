@@ -1,7 +1,7 @@
 # 分群规则列表截图 OCR 摘要
 
 识别方式：macOS Vision 本机 OCR
-截图：screenshots/list-existing-reference.jpg
+截图：截图/list-existing-reference.jpg
 
 ## 顶部
 - 系统名：消费者业务中台

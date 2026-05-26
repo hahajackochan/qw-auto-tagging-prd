@@ -10,9 +10,9 @@
   <style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;padding:40px;line-height:1.7;color:#1f2937}a{color:#2563eb}</style>
 </head>
 <body>
-  <p>正在打开最新版 PRD：<a id="latestLink" href="prd/prd_v0.3.html">prd/prd_v0.3.html</a></p>
+  <p>正在打开最新版 PRD：<a id="latestLink" href="产品需求文档/prd_v0.3.html">产品需求文档/prd_v0.3.html</a></p>
   <script>
-    const fallback = 'prd/prd_v0.3.html';
+    const fallback = '产品需求文档/prd_v0.3.html';
     fetch('latest.json?ts=' + Date.now(), { cache: 'no-store' })
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {

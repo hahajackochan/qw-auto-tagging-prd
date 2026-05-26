@@ -43,8 +43,8 @@
 
 ## 现有分群规则编辑页截图补充（2026-05-18）
 
-截图文件：`screenshots/rule-edit-existing-reference.png`
-OCR 文件：`screenshots/rule-edit-existing-reference.ocr.txt`
+截图文件：`截图/rule-edit-existing-reference.png`
+OCR 文件：`截图/rule-edit-existing-reference.ocr.txt`
 
 已识别到的现有页面元素：
 - 面包屑：用户管理 / 分群规则编辑
@@ -85,7 +85,7 @@ OCR 文件：`screenshots/rule-edit-existing-reference.ocr.txt`
 5. 当选择「相对时间范围」时，右侧出现一个天数输入框和一个方向下拉框，方向可选：以内 / 之前。
 6. 7 天以内 / 7 天之前等具体统计逻辑暂不在原型中定义，后续以在线文档描述为准。
 
-对应原型：`prototype/rule-edit-v0.1.html`
+对应原型：`原型/rule-edit-v0.1.html`
 
 ## 分群条件交互补充（2026-05-18 18:38）
 
@@ -130,4 +130,4 @@ OCR 文件：`screenshots/rule-edit-existing-reference.ocr.txt`
 - 选中框内每个运营商右侧有删除 icon，可删除。
 - 支持通过相同方式添加多个运营商。
 
-对应原型：`prototype/rule-edit-v0.4.html`
+对应原型：`原型/rule-edit-v0.4.html`
