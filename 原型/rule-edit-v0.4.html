@@ -268,7 +268,7 @@
               <div id="behaviorRows">
               <div class="condition-row" data-type="behavior">
                 <div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线上订单 -&gt; 下单</div>
-                <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|主单实付金额">主单实付金额</div>
+                <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|子单累计实付金额">子单累计实付金额</div>
                 <div class="select" data-role="behavior-operator" data-options="指定范围|等于|小于|大于">指定范围</div>
                 <input class="amount-input" placeholder="最低金额" /><span class="logic">至</span><input class="amount-input" placeholder="最高金额" />
                 <span class="delete" onclick="removeRow(this)" title="删除">✕</span>
@@ -283,7 +283,7 @@
               <div class="condition-row" data-type="behavior">
                 <div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线下订单 -&gt; 下单</div>
                 <div class="select long" data-role="behavior-field" data-options="请选择属性...|运营商主体">运营商主体</div>
-                <div class="select" data-role="behavior-operator" data-options="包含任一|包含全部|不包含">包含任一</div>
+                <div class="select" data-role="behavior-operator" data-options="包含任一|不包含">包含任一</div>
                 <div class="selected-box" id="operatorBox"><span class="operator-tag">深圳市索菲亚(Y1234) <button onclick="this.parentElement.remove()">✕</button></span><button class="btn" onclick="openOperatorModal(event)">添加</button></div>
                 <span class="delete" onclick="removeRow(this)" title="删除">✕</span>
               </div>
@@ -521,7 +521,7 @@
 
 
   const behaviorFieldMap = {
-    '线上订单 -> 下单': ['订单数','商品类目','支付时间','子单状态','主单实付金额'],
+    '线上订单 -> 下单': ['订单数','商品类目','支付时间','子单状态','子单累计实付金额'],
     '线下订单 -> 下单': ['安装时间','运营商主体'],
     '添加企微客服': ['添加情况','好友状态'],
     '意向行为 -> 报名行为': ['报名时间','报名渠道','报名状态']
@@ -569,7 +569,7 @@
   function renderOrderCount(row, isChild=false){
     row.innerHTML = `
       ${isChild ? '<div class="behavior-spacer"></div>' : '<div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线上订单 -&gt; 下单</div>'}
-      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|主单实付金额">订单数</div>
+      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|子单累计实付金额">订单数</div>
       <div class="select" data-role="behavior-operator" data-options="等于|大于|小于">等于</div>
       <input class="amount-input" placeholder="请输入订单数" />
       <span class="delete" onclick="removeRow(this)" title="删除">✕</span>`;
@@ -584,8 +584,8 @@
   function renderProductCategory(row, isChild=false){
     row.innerHTML = `
       ${isChild ? '<div class="behavior-spacer"></div>' : '<div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线上订单 -&gt; 下单</div>'}
-      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|主单实付金额">商品类目</div>
-      <div class="select" data-role="behavior-operator" data-options="包含任一|包含全部|不包含">包含任一</div>
+      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|子单累计实付金额">商品类目</div>
+      <div class="select" data-role="behavior-operator" data-options="包含任一|不包含">包含任一</div>
       <div class="select long placeholder" data-role="behavior-value" data-options="请选择|橱柜|衣柜|木门|地板|家品">请选择</div>
       <span class="delete" onclick="removeRow(this)" title="删除">✕</span>`;
     row.classList.toggle('behavior-child', isChild);
@@ -599,7 +599,7 @@
   function renderPaymentTime(row, isChild=false){
     row.innerHTML = `
       ${isChild ? '<div class="behavior-spacer"></div>' : '<div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线上订单 -&gt; 下单</div>'}
-      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|主单实付金额">支付时间</div>
+      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|子单累计实付金额">支付时间</div>
       <div class="select" data-role="time-mode" data-time-mode="row" data-options="固定起止时间|相对时间范围">固定起止时间</div>
       <div class="date placeholder">开始日期</div><span class="logic">-</span><div class="date placeholder">结束日期</div>
       <span class="delete" onclick="removeRow(this)" title="删除">✕</span>`;
@@ -615,8 +615,8 @@
     const statuses = ['部分支付','待支付','待发货','部分发货','待收货','已完成','退款中','已退款','已取消'];
     row.innerHTML = `
       ${isChild ? '<div class="behavior-spacer"></div>' : '<div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线上订单 -&gt; 下单</div>'}
-      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|主单实付金额">子单状态</div>
-      <div class="select" data-role="behavior-operator" data-options="包含任一|包含全部|不包含">包含任一</div>
+      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|子单累计实付金额">子单状态</div>
+      <div class="select" data-role="behavior-operator" data-options="包含任一|不包含">包含任一</div>
       <div class="checkbox-values">${statuses.map(v => `<label><span class="check-box"></span>${v}</label>`).join('')}</div>
       <span class="delete" onclick="removeRow(this)" title="删除">✕</span>`;
     row.classList.toggle('behavior-child', isChild);
@@ -633,7 +633,7 @@
     if (field === '商品类目') return renderProductCategory(row, isChild);
     if (field === '支付时间') return renderPaymentTime(row, isChild);
     if (field === '子单状态') return renderSubOrderStatus(row, isChild);
-    if (field === '主单实付金额') return renderAmount(row, '指定范围', isChild);
+    if (field === '子单累计实付金额') return renderAmount(row, '指定范围', isChild);
     if (field === '安装时间') return renderInstallTime(row, isChild);
     if (field === '运营商主体') return renderOperator(row, isChild);
     if (field === '添加情况' || field === '好友状态') return renderQwService(row, field, isChild);
@@ -663,7 +663,7 @@
     const range = operator === '指定范围';
     row.innerHTML = `
       ${isChild ? '<div class="behavior-spacer"></div>' : '<div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线上订单 -&gt; 下单</div>'}
-      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|主单实付金额">主单实付金额</div>
+      <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|子单累计实付金额">子单累计实付金额</div>
       <div class="select" data-role="behavior-operator" data-options="指定范围|等于|小于|大于">${operator}</div>
       ${range ? '<input class="amount-input" placeholder="最低金额" /><span class="logic">至</span><input class="amount-input" placeholder="最高金额" />' : '<input class="amount-input" placeholder="请输入金额" />'}
       <span class="delete" onclick="removeRow(this)" title="删除">✕</span>`;
@@ -696,7 +696,7 @@
     row.innerHTML = `
       ${isChild ? '<div class="behavior-spacer"></div>' : '<div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线下订单 -&gt; 下单</div>'}
       <div class="select long" data-role="behavior-field" data-options="安装时间|运营商主体">运营商主体</div>
-      <div class="select" data-role="behavior-operator" data-options="包含任一|包含全部|不包含">包含任一</div>
+      <div class="select" data-role="behavior-operator" data-options="包含任一|不包含">包含任一</div>
       <div class="selected-box" id="operatorBox"><span class="placeholder">请选择运营商主体</span><button class="btn" onclick="openOperatorModal(event)">添加</button></div>
       <span class="delete" onclick="removeRow(this)" title="删除">✕</span>`;
     row.classList.toggle('behavior-child', isChild);
@@ -743,7 +743,7 @@
       row.dataset.behaviorScene = normalizeScene(value);
       row.classList.remove('behavior-child');
       const field = row.querySelector('[data-role="behavior-field"]');
-      if (value === '线上订单 -> 下单') setSelectOptions(field, ['订单数','商品类目','支付时间','子单状态','主单实付金额'], '请选择属性...');
+      if (value === '线上订单 -> 下单') setSelectOptions(field, ['订单数','商品类目','支付时间','子单状态','子单累计实付金额'], '请选择属性...');
       if (value === '线下订单 -> 下单') setSelectOptions(field, ['安装时间','运营商主体'], '请选择属性...');
       if (value === '添加企微客服') setSelectOptions(field, ['添加情况','好友状态'], '请选择行为条件');
     }
@@ -752,12 +752,12 @@
     if (role === 'behavior-field' && value === '商品类目') renderProductCategory(row, isBehaviorChild);
     if (role === 'behavior-field' && value === '支付时间') renderPaymentTime(row, isBehaviorChild);
     if (role === 'behavior-field' && value === '子单状态') renderSubOrderStatus(row, isBehaviorChild);
-    if (role === 'behavior-field' && value === '主单实付金额') renderAmount(row, '指定范围', isBehaviorChild);
+    if (role === 'behavior-field' && value === '子单累计实付金额') renderAmount(row, '指定范围', isBehaviorChild);
     if (role === 'behavior-field' && value === '安装时间') renderInstallTime(row, isBehaviorChild);
     if (role === 'behavior-field' && value === '运营商主体') renderOperator(row, isBehaviorChild);
     if (role === 'behavior-field' && value === '添加情况') renderQwService(row, '添加情况', isBehaviorChild);
     if (role === 'behavior-field' && value === '好友状态') renderQwService(row, '好友状态', isBehaviorChild);
-    if (role === 'behavior-operator' && row.querySelector('[data-role="behavior-field"]')?.textContent.trim() === '主单实付金额') renderAmount(row, value, row.classList.contains('behavior-child'));
+    if (role === 'behavior-operator' && row.querySelector('[data-role="behavior-field"]')?.textContent.trim() === '子单累计实付金额') renderAmount(row, value, row.classList.contains('behavior-child'));
     if (role === 'time-mode' && select.dataset.timeMode === 'row') {
       if (value === '相对时间范围') {
         select.insertAdjacentHTML('afterend', '<div class="number placeholder" contenteditable="true">请输入天数</div><span class="day-unit">天</span><div class="select" data-options="以内|之前">以内</div>');
@@ -895,7 +895,7 @@
       if (target) target.classList.add('focus-hit');
     }
     if (focus === 'amount') {
-      const row = [...document.querySelectorAll('#behaviorRows .condition-row')].find(r => r.textContent.includes('主单实付金额'));
+      const row = [...document.querySelectorAll('#behaviorRows .condition-row')].find(r => r.textContent.includes('子单累计实付金额'));
       if (row) row.querySelectorAll('.amount-input,[data-role="behavior-field"],[data-role="behavior-operator"]').forEach(el => el.classList.add('focus-inline'));
     }
     if (focus === 'install_time') {
