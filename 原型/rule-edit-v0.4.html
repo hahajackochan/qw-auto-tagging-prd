@@ -665,7 +665,7 @@
       ${isChild ? '<div class="behavior-spacer"></div>' : '<div class="select long" data-role="behavior-scene" data-options="意向行为 -> 报名行为|线上订单 -> 下单|线下订单 -> 下单|添加企微客服">线上订单 -&gt; 下单</div>'}
       <div class="select long" data-role="behavior-field" data-options="订单数|商品类目|支付时间|子单状态|主单实付金额">主单实付金额</div>
       <div class="select" data-role="behavior-operator" data-options="指定范围|等于|小于|大于">${operator}</div>
-      ${range ? '<input class="amount-input" placeholder="最低金额" /><span class="logic">至</span><input class="amount-input" placeholder="最高金额" />' : '<input class="amount-input" placeholder="请输入金额（支持2位小数）" />'}
+      ${range ? '<input class="amount-input" placeholder="最低金额" /><span class="logic">至</span><input class="amount-input" placeholder="最高金额" />' : '<input class="amount-input" placeholder="请输入金额" />'}
       <span class="delete" onclick="removeRow(this)" title="删除">✕</span>`;
     row.classList.toggle('behavior-child', isChild);
     row.dataset.behaviorScene = '线上订单 -> 下单';
