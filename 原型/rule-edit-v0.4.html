@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>分群规则编辑 - 统计频率与生日时间原型</title>
+  <title>分群规则编辑 - 统计频率与生日月日范围原型</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { box-sizing: border-box; }
@@ -41,6 +41,7 @@
     .required::before { content:'*'; color:#f56c6c; margin-right:2px; }
     .form-control { flex:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
     .input,.select,.date,.number { height:34px; border:1px solid #dcdfe6; border-radius:3px; padding:0 10px; color:#606266; background:#fff; display:inline-flex; align-items:center; min-width:220px; }
+    .month-day-range { display:flex; gap:10px; align-items:center; }
     .input.placeholder,.select.placeholder,.date.placeholder { color:#c0c4cc; }
     .select::after { content:'⌄'; margin-left:auto; color:#c0c4cc; padding-left:18px; }
     .radio { display:inline-flex; align-items:center; gap:6px; margin-right:18px; color:#606266; }
@@ -239,16 +240,11 @@
               <div class="condition-row" data-type="attribute">
                 <div class="select" data-role="attribute-category" data-options="通用属性|会员属性">通用属性</div>
                 <div class="select long" data-role="attribute-field" data-options="位置|用户身份|分销员身份|生日时间">生日时间</div>
-                <div class="select" id="timeMode" data-role="time-mode" data-time-mode="true" data-options="固定起止时间|相对时间范围">固定起止时间</div>
-                <div id="fixedFields" style="display:flex; gap:10px; align-items:center;">
-                  <div class="date placeholder">选择开始时间</div>
+                <div class="select" id="birthdayRangeMode" data-role="birthday-range-mode" data-options="指定月日范围">指定月日范围</div>
+                <div class="month-day-range" id="birthdayRangeFields">
+                  <div class="date placeholder">请选择开始月日</div>
                   <span class="logic">至</span>
-                  <div class="date placeholder">选择结束时间</div>
-                </div>
-                <div id="relativeFields" style="display:none; gap:10px; align-items:center;">
-                  <div class="number placeholder" contenteditable="true">请输入天数</div>
-                  <span class="day-unit">天</span>
-                  <div class="select" style="min-width:96px;" data-options="以内|之前">以内</div>
+                  <div class="date placeholder">请选择结束月日</div>
                 </div>
                 <span class="delete" onclick="removeRow(this)" title="删除">✕</span>
               </div>
@@ -351,17 +347,6 @@
     });
   });
 
-  let mode = 'fixed';
-  function setTimeMode(nextMode){
-    mode = nextMode;
-    const timeMode = document.getElementById('timeMode');
-    const fixedFields = document.getElementById('fixedFields');
-    const relativeFields = document.getElementById('relativeFields');
-    if (timeMode) timeMode.childNodes[0].textContent = mode === 'fixed' ? '固定起止时间' : '相对时间范围';
-    if (fixedFields) fixedFields.style.display = mode === 'fixed' ? 'flex' : 'none';
-    if (relativeFields) relativeFields.style.display = mode === 'fixed' ? 'none' : 'flex';
-  }
-
   const menu = document.createElement('div');
   menu.className = 'dropdown-menu';
   document.body.appendChild(menu);
@@ -386,9 +371,6 @@
           const value = option.dataset.value;
           select.childNodes[0].textContent = value;
           select.classList.remove('placeholder');
-          if (select.dataset.timeMode === 'true') {
-            setTimeMode(value === '相对时间范围' ? 'relative' : 'fixed');
-          }
           handleSelectChange(select, value);
           closeMenu();
         });
@@ -506,6 +488,21 @@
     select.dataset.options = options.join('|');
     select.childNodes[0].textContent = text || '请选择';
     select.classList.add('placeholder');
+  }
+
+
+  function renderBirthdayRange(row){
+    row.innerHTML = `
+      <div class="select" data-role="attribute-category" data-options="通用属性|会员属性">通用属性</div>
+      <div class="select long" data-role="attribute-field" data-options="位置|用户身份|分销员身份|生日时间">生日时间</div>
+      <div class="select" data-role="birthday-range-mode" data-options="指定月日范围">指定月日范围</div>
+      <div class="month-day-range">
+        <div class="date placeholder">请选择开始月日</div>
+        <span class="logic">至</span>
+        <div class="date placeholder">请选择结束月日</div>
+      </div>
+      <span class="delete" onclick="removeRow(this)" title="删除">✕</span>`;
+    bindAllSelects(row);
   }
 
   function renderRecommendIdentity(row){
@@ -735,6 +732,7 @@
       if (value === '会员属性') setSelectOptions(field, ['推荐官身份'], '请选择属性');
       if (value === '通用属性') setSelectOptions(field, ['位置','用户身份','分销员身份','生日时间'], '请选择属性');
     }
+    if (role === 'attribute-field' && value === '生日时间') renderBirthdayRange(row);
     if (role === 'attribute-field' && value === '推荐官身份') renderRecommendIdentity(row);
     if (role === 'behavior-scene') {
       const previousGroup = row.dataset.behaviorGroup;
@@ -876,14 +874,11 @@
     if (focus === 'birthday_time') {
       const target = document.querySelector('.focus-birthday');
       if (target) target.classList.add('focus-hit');
-      const row = document.querySelector('#attributeRows .condition-row');
-      if (row) row.querySelectorAll('[data-role="attribute-category"],[data-role="attribute-field"],[data-role="time-mode"],.date,.number').forEach(el => el.classList.add('focus-inline'));
     }
     if (focus === 'birthday_relative' || focus === 'attribute_conditions') {
       document.body.classList.add('attribute-focus');
       const target = document.querySelector('.focus-attribute-block');
       if (target) target.classList.add('focus-hit');
-      setTimeMode('relative');
     }
     if (focus === 'recommend_identity') {
       const row = [...document.querySelectorAll('#attributeRows .condition-row')].find(r => r.textContent.includes('推荐官身份'));
